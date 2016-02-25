@@ -1,0 +1,334 @@
+import java.util.HashMap;
+import java.util.Random;
+
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+
+public class ArenaGenerator {
+	
+	
+	public ArenaGenerator(World world, int xcoord, int zcoord, int xlength, int zlength, int players) {
+		generateMap(xlength, zlength, xcoord, zcoord, world, players);
+	}
+	
+	
+	public HashMap<Location, String> spawnpoints = new HashMap<Location, String>();
+	public void clearChunk(Chunk chunk) {
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {
+					chunk.getBlock(x, y, z).setType(Material.AIR);
+				}
+			}
+		}
+	}
+	public HashMap<Location, String> generateMap(int lengthx, int lengthz, int xloc, int zloc, World world, int players) {
+		for (int iteratorX = xloc; iteratorX * 16 < (lengthx * 16) + xloc;  iteratorX++) {
+			for (int iteratorZ = zloc; iteratorZ * 16 < (lengthz * 16) + zloc; iteratorZ ++) {
+				Chunk chunk = world.getChunkAt((((iteratorX) * 16) + 1) + xloc, ((iteratorZ) * 16) + 1 + zloc);
+				chunk.load();
+				clearChunk(chunk);
+				Random ran = new Random();
+				int num = ran.nextInt(6);
+				switch (num) {
+				case (0): segmentCross(chunk);
+				case (1): segmentOpen(chunk);
+				case (2): segmentPillars(chunk);
+				case (3): segmentBars(chunk);
+				case (4): segmentLavaGrid(chunk);
+				case (5): segmentBumps(chunk);
+				default: segmentOpen(chunk);
+				}
+			}
+		}
+		for (int iteratorX = xloc; iteratorX  * 16 < (lengthx * 16) + xloc; iteratorX ++) {
+			for (int iteratorZ = xloc; iteratorZ * 16 < (lengthz * 16) + zloc; iteratorZ ++) {
+				Chunk chunk = world.getChunkAt(((iteratorX) * 16) + 1 + xloc, ((iteratorZ) * 16) + 1 + zloc);
+				for (int x = 0; x < 16; x ++) {
+					for (int z = 0; z < 16; z ++) {
+						chunk.getBlock(x, 63, z).setType(Material.WOOD);
+					}
+				}
+			}
+		}
+		for (int x = 0; x < players; x ++) {
+			spawnpoints.put(getSpawnpoint(lengthx, lengthz, world), "hi, this is awkward");
+		}
+		return spawnpoints;
+	}
+	
+	public void segmentCross(Chunk chunk) {
+		Random ran = new Random();
+		int rand = ran.nextInt(3);
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {	
+					if (rand == 1) {
+						if ((x == 0 && (z != 7 && z != 8))
+								|| (z == 0 && (x != 7 && x != 8)) 
+								|| (x == 15 && (z != 7 && z != 8)) 
+								|| (z == 15 && (x != 7 && x != 8))) {
+							Random blockdec = new Random();
+							if (blockdec.nextInt(2) == 1) {
+								chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+							}
+							else {
+								chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+							}
+						}
+					}
+					if (Math.abs(x - 7.5) == Math.abs(z - 7.5) && Math.abs(x - 7.5) < 6.5 && Math.abs(z - 7.5) < 6.5) {
+						Random blockdec = new Random();
+						if (blockdec.nextInt(2) == 1) {
+							chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+						}
+						else {
+							chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void segmentOpen(Chunk chunk) {
+		Random ran = new Random();
+		int rand = ran.nextInt(3);
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {	
+					if (rand == 1) {
+						if ((x == 0 && (z != 7 && z != 8))
+								|| (z == 0 && (x != 7 && x != 8)) 
+								|| (x == 15 && (z != 7 && z != 8)) 
+								|| (z == 15 && (x != 7 && x != 8))) {
+							Random blockdec = new Random();
+							if (blockdec.nextInt(2) == 1) {
+								chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+							}
+							else {
+								chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	public void segmentBars(Chunk chunk) {
+		Random ran = new Random();
+		int rand = ran.nextInt(3);
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {	
+					if (rand == 1) {
+						if ((x == 0 && (z != 7 && z != 8))
+								|| (z == 0 && (x != 7 && x != 8)) 
+								|| (x == 15 && (z != 7 && z != 8)) 
+								|| (z == 15 && (x != 7 && x != 8))) {
+							Random blockdec = new Random();
+							if (blockdec.nextInt(2) == 1) {
+								chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+							}
+							else {
+								chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+							}
+						}
+					}
+				}
+			}
+		}
+		int end = 0;
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				if (new Random().nextInt(49) == 1 && end < 2) {
+					end ++;
+					for (int y = 0; y < 128; y ++) {
+						Random blockdec = new Random();
+						if (blockdec.nextInt(2) == 1) {
+							chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+						}
+						else {
+							chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+						}
+					}
+				}
+			}
+		}
+		end = 0;
+		for (int x = 0; x < 16; x ++) {
+			for (int y = 0; y < 128; y ++) {
+				for (int z = 0; z < 16; z ++) {
+					if (new Random().nextInt(49) == 1 && end < 2 && 70 > y  && y > 64) {
+						end ++;
+						Random blockdec = new Random();
+						if (blockdec.nextInt(2) == 1) {
+							chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+						}							
+						else {
+							chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+						}
+					}
+				}
+			}
+		}
+		end = 0;
+		for (int y = 0; y < 128; y ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int x = 0; x < 16; x ++) {
+					if (new Random().nextInt(49) == 1 && end < 2 && 70 > y  && y > 64) {
+						end ++;
+						Random blockdec = new Random();
+						if (blockdec.nextInt(2) == 1) {
+							chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+						}							
+						else {
+							chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+						}
+					}
+				}
+			}
+		}
+	}
+	public void segmentPillars(Chunk chunk) {
+		Random ran = new Random();
+		int rand = ran.nextInt(3);
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {	
+					if (rand == 1) {
+						if ((x == 0 && (z != 7 && z != 8))
+								|| (z == 0 && (x != 7 && x != 8)) 
+								|| (x == 15 && (z != 7 && z != 8)) 
+								|| (z == 15 && (x != 7 && x != 8))) {
+							Random blockdec = new Random();
+							if (blockdec.nextInt(2) == 1) {
+								chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+							}
+							else {
+								chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				if (new Random().nextInt(5) == 1) {
+					for (int y = 0; y < 128; y ++) {
+						Random blockdec = new Random();
+						if (blockdec.nextInt(2) == 1) {
+							chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+						}
+						else {
+							chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+						}
+					}
+				}
+			}
+		}
+	}
+	public void segmentLavaGrid(Chunk chunk) {
+		Random ran = new Random();
+		int rand = ran.nextInt(3);
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {	
+					if (rand == 1) {
+						if ((x == 0 && (z != 7 && z != 8))
+								|| (z == 0 && (x != 7 && x != 8)) 
+								|| (x == 15 && (z != 7 && z != 8)) 
+								|| (z == 15 && (x != 7 && x != 8))) {
+							Random blockdec = new Random();
+							if (blockdec.nextInt(2) == 1) {
+								chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+							}
+							else {
+								chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				if ((x % 2 == 0 && z % 2 == 0) || (x % 2 == 1 && z % 2 == 1)) {
+					Random blockdec = new Random();
+					if (blockdec.nextInt(2) == 1) {
+						chunk.getBlock(x, 63, z).setType(Material.MOSSY_COBBLESTONE);
+					}
+					else {
+						chunk.getBlock(x, 63, z).setType(Material.COBBLESTONE);
+					}
+				}
+				else {
+					chunk.getBlock(x, 63, z).setType(Material.LAVA);
+				}
+			}
+		}
+	}
+	public void segmentBumps(Chunk chunk) {
+		Random ran = new Random();
+		int rand = ran.nextInt(3);
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				for (int y = 0; y < 128; y ++) {	
+					if (rand == 1) {
+						if ((x == 0 && (z != 7 && z != 8))
+								|| (z == 0 && (x != 7 && x != 8)) 
+								|| (x == 15 && (z != 7 && z != 8)) 
+								|| (z == 15 && (x != 7 && x != 8))) {
+							Random blockdec = new Random();
+							if (blockdec.nextInt(2) == 1) {
+								chunk.getBlock(x, y, z).setType(Material.MOSSY_COBBLESTONE);
+							}
+							else {
+								chunk.getBlock(x, y, z).setType(Material.COBBLESTONE);
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int x = 0; x < 16; x ++) {
+			for (int z = 0; z < 16; z ++) {
+				if (ran.nextInt(2) == 1) {
+					Random blockdec = new Random();
+					if (blockdec.nextInt(2) == 1) {
+						chunk.getBlock(x, 64 + ran.nextInt(2), z).setType(Material.MOSSY_COBBLESTONE);
+					}
+					else {
+						chunk.getBlock(x, 64 + ran.nextInt(2), z).setType(Material.COBBLESTONE);
+					}
+				}
+			}
+		}
+	}
+	
+	public Location randomLoc(int boundsx, int boundsz, World world) {
+		int distx = boundsx * 16;
+		int distz = boundsz * 16;
+		int x = new Random().nextInt(distx);
+		int z = new Random().nextInt(distz);
+		return new Location(world, x, 65, z);
+	}
+	
+	public Location getSpawnpoint(int segmentsx, int segmentsz, World world) {
+		Boolean done = true;
+		int tries = 0;
+		while(done && tries < 1000) {
+			tries ++;
+			Location loc = randomLoc(segmentsx, segmentsz, world);
+			if (loc.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR &&
+					loc.clone().getBlock().getType() == Material.AIR &&
+					loc.clone().add(0, 1, 0).getBlock().getType() == Material.AIR) {
+				return loc;
+			}
+		}
+		return null;
+	}
+}
